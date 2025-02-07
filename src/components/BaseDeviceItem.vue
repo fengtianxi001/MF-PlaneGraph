@@ -1,8 +1,10 @@
 <template>
   <div class="base-device-item">
-    <div class="item-left">💡</div>
+    <div class="item-left">
+      <img :src="data.icon" alt="" style="width: 100%; height: 100%" />
+    </div>
     <div class="item-main">
-      <div class="item-name">智能灯(119538153)</div>
+      <div class="item-name">{{ data.name }}({{ data.code }})</div>
       <div class="item-desc">已绑定-客厅</div>
     </div>
     <div class="item-right">
@@ -12,15 +14,18 @@
 </template>
 <script setup lang="ts">
 import { Switch } from '@arco-design/web-vue'
-// interface PropsType {}
-// const props = defineProps<PropsType>()
+
+interface PropsType {
+  data: Record<string, any>
+}
+const props = defineProps<PropsType>()
 </script>
 <style lang="scss" scoped>
 .base-device-item {
   display: flex;
   align-items: center;
   padding: 8px;
-  background-color: var(--color-fill-2);
+  background-color: var(--color-fill-1);
   border: 1px solid var(--color-border);
 
   //   background-color: blue;
