@@ -47,6 +47,7 @@
   height: 100%;
   overflow: hidden;
   font-family: SarasaMonoTSCBoldItalic;
+  color: var(--color-text-1);
 }
 
 .app-loading {
