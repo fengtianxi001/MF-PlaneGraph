@@ -1,19 +1,15 @@
 <template>
   <div class="base-device-detail">
-    <div class="detail-banner">
-      <img src="/public/images/devices/2.png" alt="" />
-    </div>
-    <div class="detail-name">小米电视盒子</div>
-    <!-- <div class="detail-code">xasdxsasdas</div> -->
-
-    <div class="detail-items">
+    <img class="base-device-detail-banner" :src="data.image" alt="" />
+    <div class="base-device-detail-name">{{ data.name }}</div>
+    <div class="base-device-detail-items">
       <div class="detail-item">
         <div class="item-label">品牌</div>
         <div class="item-value">小米公司</div>
       </div>
       <div class="detail-item">
         <div class="item-label">分类</div>
-        <div class="item-value">照明</div>
+        <div class="item-value">{{ data.category }}</div>
       </div>
       <div class="detail-item">
         <div class="item-label">状态</div>
@@ -23,8 +19,11 @@
   </div>
 </template>
 <script setup lang="ts">
-// interface PropsType {}
-// const props = defineProps<PropsType>()
+import { type DeviceItemType } from '@/hooks'
+interface PropsType {
+  data: DeviceItemType
+}
+const props = defineProps<PropsType>()
 </script>
 <style lang="scss" scoped>
 .base-device-detail {
@@ -32,28 +31,18 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  .detail-banner {
-    img {
-      width: 80px;
-    }
+  &-banner {
+    width: 80px;
   }
-  .detail-name {
+  &-name {
     font-weight: bold;
   }
-  .detail-code {
-    padding: 4px 8px;
-    margin-top: 10px;
-    font-size: 10px;
-    color: rgb(var(--gray-6));
-    border: 1px solid var(--color-neutral-3);
-    border-radius: 4px;
-  }
-  .detail-items {
+  &-items {
     display: flex;
     margin-top: 10px;
     margin-bottom: 10px;
-    border-top: 1px solid var(--color-neutral-3);
-    border-bottom: 1px solid var(--color-neutral-3);
+    border-top: 1px solid var(--color-neutral-2);
+    border-bottom: 1px solid var(--color-neutral-2);
     .detail-item {
       position: relative;
       box-sizing: border-box;
@@ -69,7 +58,7 @@
         width: 1px;
         height: 20px;
         content: '';
-        background-color: var(--color-neutral-3);
+        background-color: var(--color-neutral-2);
       }
       .item-label {
         font-size: 10px;

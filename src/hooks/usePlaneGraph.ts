@@ -19,6 +19,7 @@ export type DeviceItemType = {
   code: string
   image: string
   category: DeviceCategoryItemType
+  binded: string | null
 }
 
 export type SceneItemType = {
@@ -40,42 +41,49 @@ export function usePlaneGraph(config: UsePlaneGraphConfigType) {
       code: 'b64d86a19dc7',
       image: '/images/devices/1.png',
       category: '其他',
+      binded: null,
     },
     {
       name: '轻薄笔记本',
       code: '852b8717d009',
       image: '/images/devices/1.png',
       category: '娱乐',
+      binded: null,
     },
     {
       name: '智慧吸顶灯',
       code: '98317a6a586f',
       image: '/images/devices/3.png',
-      category: '照明',
+      category: '其他',
+      binded: null,
     },
     {
       name: '云台摄像头',
       code: '4f3be09a9e47',
       image: '/images/devices/4.png',
       category: '安全',
+      binded: null,
     },
     {
       name: '空气净化器',
       code: '6aa2d9c17cda',
       image: '/images/devices/5.png',
       category: '温控',
+      binded: null,
     },
     {
       name: '滚筒洗衣机',
       code: '8792dd8f989f',
       image: '/images/devices/6.png',
       category: '其他',
+      binded: null,
     },
     {
       name: '按摩椅',
       code: '1ccefe2be178',
       image: '/images/devices/7.png',
       category: '娱乐',
+      binded: null,
     },
 
     {
@@ -83,60 +91,70 @@ export function usePlaneGraph(config: UsePlaneGraphConfigType) {
       code: 'b1c9ff86591a',
       image: '/images/devices/8.png',
       category: '娱乐',
+      binded: null,
     },
     {
       name: '电吹风',
       code: 'ad77e73280d3',
       image: '/images/devices/9.png',
       category: '其他',
+      binded: null,
     },
     {
       name: '温度传感器',
       code: 'd500b354a7fd',
       image: '/images/devices/10.png',
       category: '温控',
+      binded: null,
     },
     {
       name: '扫地机器人',
       code: 'f32638d152b8',
       image: '/images/devices/11.png',
       category: '安全',
+      binded: null,
     },
     {
       name: '智能音箱',
       code: '35ea0618149d',
       image: '/images/devices/12.png',
       category: '娱乐',
+      binded: null,
     },
     {
       name: '智能闹钟',
       code: 'c3e3f3a6213d',
       image: '/images/devices/13.png',
       category: '其他',
+      binded: null,
     },
     {
       name: '智能门锁',
       code: 'ccc5e7d2c7da',
       image: '/images/devices/14.png',
       category: '安全',
+      binded: null,
     },
     {
       name: '打印机',
       code: '2eb5772561a6',
       image: '/images/devices/15.png',
       category: '其他',
+      binded: null,
     },
     {
       name: '电风扇',
       code: 'cc805117dc5d',
       image: '/images/devices/16.png',
       category: '其他',
+      binded: null,
     },
     {
       name: '冰柜',
       code: 'e801626f006b',
       image: '/images/devices/17.png',
       category: '温控',
+      binded: null,
     },
   ])
   //设备的分类列表
@@ -217,26 +235,29 @@ export function usePlaneGraph(config: UsePlaneGraphConfigType) {
   }
   //生成监听事件
   const generateEvent = () => {
-    // config.deviceContainer.value!.ondragstart = (event: any) => {
-    //   event.dataTransfer!.setData('id', '123')
-    // }
-    // config.deviceContainer.value!.ondrag = () => {
-    //   console.log('ondrap正在拖动')
-    // }
-    // config.deviceContainer.value!.ondragend = () => {
-    //   console.log('ondragend拖动结束')
-    // }
-
+    config.deviceContainer.value!.ondragstart = (event: any) => {
+      const el = event.target as HTMLElement
+      const code = el.getAttribute('data-code')
+      event.dataTransfer!.setData('code', code)
+    }
     // 在放置元素内移动
     config.planeContainer.value!.ondragover = (event: any) => {
       event.preventDefault()
     }
 
     config.planeContainer.value!.ondrop = (event: any) => {
-      var bounds2 = map.value.getBounds()
-      var north = bounds2.getNorth()
-      var west = bounds2.getWest()
-      var c2 = map.value.project([north, west], map.value.getZoom())
+      const code = event.dataTransfer!.getData('code')
+      const device = deviceList.value.find((item) => item.code === code)!
+      device.binded = sceneCurrent.value
+      const cscene = sceneList.value.find(
+        (item) => item.value === sceneCurrent.value
+      )!
+      cscene.devices.push(device)
+      //   console.log('cscene', cscene)
+      const bounds = map.value.getBounds()
+      const north = bounds.getNorth()
+      const west = bounds.getWest()
+      const c2 = map.value.project([north, west], map.value.getZoom())
       const rect = config.planeContainer.value!.getBoundingClientRect()
 
       // 计算相对坐标
@@ -248,7 +269,7 @@ export function usePlaneGraph(config: UsePlaneGraphConfigType) {
         map.value.getZoom()
       )
       const newComponent = defineComponent({
-        render: () => h(BaseDeviceMarker, {}),
+        render: () => h(BaseDeviceMarker, { data: device }),
       })
       const instance = createVNode(newComponent)
       render(instance, document.createElement('div'))
@@ -258,7 +279,14 @@ export function usePlaneGraph(config: UsePlaneGraphConfigType) {
         iconSize: [2, 2],
         iconAnchor: [1, 1],
       })
-      L.marker(latlng, { icon, draggable: true }).addTo(map.value)
+      const marker = L.marker(latlng, { icon, draggable: true })
+      marker.on('mouseover', function () {
+        this.getElement().style.zIndex = 1000
+      })
+      marker.on('mouseout', function () {
+        this.getElement().style.zIndex = 256
+      })
+      marker.addTo(map.value)
     }
   }
 
@@ -272,6 +300,7 @@ export function usePlaneGraph(config: UsePlaneGraphConfigType) {
     generateScene()
     generateEvent()
   })
+
   return {
     deviceList,
     sceneList,

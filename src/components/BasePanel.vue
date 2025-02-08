@@ -1,20 +1,28 @@
 <template>
   <div class="base-panel">
-    <div class="panel-header">{{ title }}</div>
-    <div class="panel-filter" v-if="$slots.filter">
+    <div class="base-panel-header">
+      <span class="base-panel-header-title">{{ title }}</span>
+      <span class="base-panel-header-tip" v-if="tip">
+        <icon-question-circle />
+        <span style="margin-left: 2px">{{ tip }}</span>
+      </span>
+    </div>
+    <div class="base-panel-filter" v-if="$slots.filter">
       <slot name="filter"></slot>
     </div>
-    <div class="panel-body">
+    <div class="base-panel-body">
       <!-- 让滚动条贴着容器边缘   -->
-      <div class="panel-wrap">
+      <div class="base-panel-wrap">
         <slot name="body"></slot>
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
+import { IconQuestionCircle } from '@arco-design/web-vue/es/icon'
 interface PropsType {
   title: string
+  tip?: string
 }
 const props = defineProps<PropsType>()
 </script>
@@ -28,27 +36,35 @@ const props = defineProps<PropsType>()
   overflow: hidden;
   background-color: var(--color-bg-2);
   border: 1px solid var(--color-neutral-3);
-  .panel-header {
+  &-header {
     flex-shrink: 0;
     padding: 20px 20px 0;
-    font-size: 18px;
+    &-title {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    &-tip {
+      margin-left: 10px;
+      font-size: 12px;
+      color: var(--color-neutral-5);
+    }
   }
-  .panel-filter {
+  &-filter {
     flex-shrink: 0;
     padding: 20px 20px 0;
   }
-  .panel-body {
+  &-body {
     flex: 1;
     margin-top: 20px;
     margin-bottom: 20px;
     overflow: hidden;
-    .panel-wrap {
-      box-sizing: border-box;
-      height: 100%;
-      padding-right: 20px;
-      padding-left: 20px;
-      overflow-y: auto;
-    }
+  }
+  &-wrap {
+    box-sizing: border-box;
+    height: 100%;
+    padding-right: 20px;
+    padding-left: 20px;
+    overflow-y: auto;
   }
 }
 </style>

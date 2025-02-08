@@ -13,7 +13,7 @@
         <div class="plane-container" ref="planeContainer"></div>
       </template>
     </BasePanel>
-    <BasePanel title="智能设备">
+    <BasePanel title="智能设备" tip="拖拽设备至左侧进行放置">
       <template #filter>
         <RadioGroup
           v-model="deviceCategoryCurrent"
@@ -23,27 +23,25 @@
       </template>
       <template #body>
         <div class="device-container" ref="deviceContainer">
-          <BaseDeviceItem v-for="item in deviceListByCategory" :data="item" />
+          <BaseDeviceItem
+            v-for="item in deviceListByCategory"
+            :data-code="item.code"
+            :data="item"
+          />
         </div>
       </template>
     </BasePanel>
   </Layout>
 </template>
 <script setup lang="ts">
-import * as L from 'leaflet'
-import {
-  BasePanel,
-  BaseDeviceItem,
-  BaseDeviceMarker,
-  BaseDeviceDetail,
-} from '@/components'
-import { RadioGroup, Radio } from '@arco-design/web-vue'
+import { BasePanel, BaseDeviceItem } from '@/components'
+import { RadioGroup } from '@arco-design/web-vue'
 import { Layout } from '@/layout'
-import { ref, onMounted, defineComponent, h, createVNode, render } from 'vue'
+import { ref } from 'vue'
 import { usePlaneGraph } from '@/hooks'
 
-const planeContainer = ref<HTMLElement>()
-const deviceContainer = ref<HTMLElement>()
+const planeContainer = ref<HTMLElement | null>(null)
+const deviceContainer = ref<HTMLElement | null>(null)
 
 const {
   deviceListByCategory,
@@ -53,93 +51,15 @@ const {
   sceneCurrent,
   generateScene,
 } = usePlaneGraph({ planeContainer, deviceContainer })
-
-// onMounted(() => {
-//   const map = L.map(planeContainer.value, {
-//     minZoom: 1,
-//     maxZoom: 4,
-//     crs: L.CRS.Simple,
-//     attributionControl: false,
-//   })
-
-//   // 定义图片的宽度和高度，以及图片的路径
-//   const config = {
-//     width: 1103,
-//     height: 1025,
-//     url: '/images/scenes/1.png',
-//   }
-
-//   const southWest = map.unproject([0, config.height], map.getMinZoom() + 1)
-//   const northEast = map.unproject([config.width, 0], map.getMinZoom() + 1)
-//   const bounds = new L.LatLngBounds(southWest, northEast)
-//   L.imageOverlay(config.url, bounds).addTo(map)
-
-//   map.fitBounds(bounds)
-
-//   //
-
-//   const de = deviceContainer.value!
-//   const pe = planeContainer.value!
-
-//   de.ondragstart = (event: any) => {
-//     // console.log('event.dataTransfer',event.dataTransfer.setData)
-//     event.dataTransfer!.setData('id', '123')
-//   }
-//   // 正在拖动
-//   de.ondrag = function () {
-//     // console.log('ondrap正在拖动')
-//   }
-//   // 拖动结束
-//   de.ondragend = function () {
-//     console.log('ondragend拖动结束')
-//   }
-
-//   // pe.ondragenter = function () {
-//   //   console.log('ondragenter进入到放置元素')
-//   // }
-//   // 在放置元素内移动
-//   pe.ondragover = function (event: any) {
-//     event.preventDefault()
-//   }
-//   // 将拖动元素放置到放置元素
-//   pe.ondrop = function (event: any) {
-//     // const a = map.project({lat:10,lng:10},map.getZoom())
-//     // console.log('a',a)
-//     // console.log('event', event)
-//     var bounds2 = map.getBounds()
-//     var north = bounds2.getNorth()
-//     var west = bounds2.getWest()
-//     var c2 = map.project([north, west], map.getZoom())
-//     // console.log('c1',c1)
-//     // console.log("c2", c2);
-//     // const { clientX,clientY } = event;
-
-//     const rect = pe.getBoundingClientRect()
-
-//     // 计算相对坐标
-//     const x = event.clientX - rect.left
-//     const y = event.clientY - rect.top
-
-//     const latlng = map.unproject([x + c2.x, y + c2.y], map.getZoom())
-
-//     const newComponent = defineComponent({
-//       render: () => h(BaseDeviceMarker, {}),
-//     })
-//     const instance = createVNode(newComponent)
-//     render(instance, document.createElement('div'))
-
-//     const icon = L.divIcon({
-//       html: instance.el,
-//       iconSize: [2, 2],
-//       iconAnchor: [1, 1],
-//     })
-//     L.marker(latlng, { icon, draggable: true }).addTo(map)
-//   }
-// })
 </script>
 
 <style lang="scss" scoped>
 .device-container {
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-rows: repeat(auto-fill, 60px);
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
   height: 100%;
 }
 .plane-container {
