@@ -1,4 +1,16 @@
-import { ref, computed } from 'vue'
+import {
+  ref,
+  computed,
+  shallowRef,
+  type Ref,
+  defineComponent,
+  h,
+  createVNode,
+  render,
+  onMounted,
+} from 'vue'
+import * as L from 'leaflet'
+import { BaseDeviceMarker } from '@/components'
 
 export type DeviceCategoryItemType = '温控' | '安全' | '娱乐' | '其他'
 
@@ -12,10 +24,16 @@ export type DeviceItemType = {
 export type SceneItemType = {
   label: string
   value: string
+  image: string
   devices: DeviceItemType[]
 }
 
-export function usePlaneGraph() {
+type UsePlaneGraphConfigType = {
+  planeContainer: Ref<HTMLElement | null>
+  deviceContainer: Ref<HTMLElement | null>
+}
+export function usePlaneGraph(config: UsePlaneGraphConfigType) {
+  //全部设备列表
   const deviceList = ref<DeviceItemType[]>([
     {
       name: '空气加湿器',
@@ -121,7 +139,7 @@ export function usePlaneGraph() {
       category: '温控',
     },
   ])
-
+  //设备的分类列表
   const deviceCategoryList = ref<Array<DeviceCategoryItemType | '全部'>>([
     '全部',
     '温控',
@@ -129,9 +147,9 @@ export function usePlaneGraph() {
     '娱乐',
     '其他',
   ])
-
+  //当前的设备分类
   const deviceCategoryCurrent = ref<DeviceCategoryItemType | '全部'>('全部')
-
+  //当前设备分类下的设备列表
   const deviceListByCategory = computed(() => {
     if (deviceCategoryCurrent.value === '全部') {
       return deviceList.value
@@ -140,27 +158,120 @@ export function usePlaneGraph() {
       (item) => item.category === deviceCategoryCurrent.value
     )
   })
-
+  //场景列表
   const sceneList = ref<SceneItemType[]>([
     {
       label: '场景1',
       value: '场景1',
+      image: '/images/scenes/1.png',
       devices: [],
     },
     {
       label: '场景2',
       value: '场景2',
-      devices: [],
-    },
-    {
-      label: '场景3',
-      value: '场景3',
+      image: '/images/scenes/2.png',
       devices: [],
     },
   ])
-
+  //当前的场景
   const sceneCurrent = ref(sceneList.value[0].value)
 
+  const map = shallowRef()
+
+  const loading = ref(false)
+
+  //获取图片信息
+  const getImageInfo = (url: string) => {
+    return new Promise<[number, number]>((resolve, reject) => {
+      const image = new Image()
+      image.onload = () => resolve([image.width, image.height])
+      image.src = url
+    })
+  }
+
+  //生成场景
+  const generateScene = async () => {
+    loading.value = true
+
+    // 清除地图上的所有图层
+    map.value.eachLayer((layer: any) => {
+      map.value.removeLayer(layer)
+    })
+    const current = sceneList.value.find(
+      (item) => item.value === sceneCurrent.value
+    )
+    const [width, height] = await getImageInfo(current!.image)
+    const southWest = map.value.unproject(
+      [0, height],
+      map.value.getMinZoom() + 1
+    )
+    const northEast = map.value.unproject(
+      [width, 0],
+      map.value.getMinZoom() + 1
+    )
+    const bounds = new L.LatLngBounds(southWest, northEast)
+    L.imageOverlay(current!.image, bounds).addTo(map.value)
+
+    map.value.fitBounds(bounds)
+    loading.value = false
+  }
+  //生成监听事件
+  const generateEvent = () => {
+    // config.deviceContainer.value!.ondragstart = (event: any) => {
+    //   event.dataTransfer!.setData('id', '123')
+    // }
+    // config.deviceContainer.value!.ondrag = () => {
+    //   console.log('ondrap正在拖动')
+    // }
+    // config.deviceContainer.value!.ondragend = () => {
+    //   console.log('ondragend拖动结束')
+    // }
+
+    // 在放置元素内移动
+    config.planeContainer.value!.ondragover = (event: any) => {
+      event.preventDefault()
+    }
+
+    config.planeContainer.value!.ondrop = (event: any) => {
+      var bounds2 = map.value.getBounds()
+      var north = bounds2.getNorth()
+      var west = bounds2.getWest()
+      var c2 = map.value.project([north, west], map.value.getZoom())
+      const rect = config.planeContainer.value!.getBoundingClientRect()
+
+      // 计算相对坐标
+      const x = event.clientX - rect.left
+      const y = event.clientY - rect.top
+
+      const latlng = map.value.unproject(
+        [x + c2.x, y + c2.y],
+        map.value.getZoom()
+      )
+      const newComponent = defineComponent({
+        render: () => h(BaseDeviceMarker, {}),
+      })
+      const instance = createVNode(newComponent)
+      render(instance, document.createElement('div'))
+
+      const icon = L.divIcon({
+        html: instance.el as HTMLElement,
+        iconSize: [2, 2],
+        iconAnchor: [1, 1],
+      })
+      L.marker(latlng, { icon, draggable: true }).addTo(map.value)
+    }
+  }
+
+  onMounted(() => {
+    map.value = L.map(config.planeContainer.value!, {
+      minZoom: 1,
+      maxZoom: 4,
+      crs: L.CRS.Simple,
+      attributionControl: false,
+    })
+    generateScene()
+    generateEvent()
+  })
   return {
     deviceList,
     sceneList,
@@ -168,6 +279,7 @@ export function usePlaneGraph() {
     sceneCurrent,
     deviceCategoryList,
     deviceListByCategory,
+    generateScene,
   }
 }
 

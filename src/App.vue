@@ -2,12 +2,15 @@
   <Layout>
     <BasePanel title="房间平面图">
       <template #filter>
-        <RadioGroup v-model="sceneCurrent" :options="sceneList" type="button" />
+        <RadioGroup
+          v-model="sceneCurrent"
+          :options="sceneList"
+          type="button"
+          @change="generateScene"
+        />
       </template>
       <template #body>
-        <div class="plane-container" ref="planeContainer">
-          <BaseDeviceMarker />
-        </div>
+        <div class="plane-container" ref="planeContainer"></div>
       </template>
     </BasePanel>
     <BasePanel title="智能设备">
@@ -39,16 +42,17 @@ import { Layout } from '@/layout'
 import { ref, onMounted, defineComponent, h, createVNode, render } from 'vue'
 import { usePlaneGraph } from '@/hooks'
 
+const planeContainer = ref<HTMLElement>()
+const deviceContainer = ref<HTMLElement>()
+
 const {
   deviceListByCategory,
   deviceCategoryList,
   deviceCategoryCurrent,
   sceneList,
   sceneCurrent,
-} = usePlaneGraph()
-
-const planeContainer = ref<HTMLElement>()
-const deviceContainer = ref<HTMLElement>()
+  generateScene,
+} = usePlaneGraph({ planeContainer, deviceContainer })
 
 // onMounted(() => {
 //   const map = L.map(planeContainer.value, {
