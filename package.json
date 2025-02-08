@@ -18,12 +18,14 @@
     "@arco-design/web-vue": "^2.56.3",
     "animate.css": "^4.1.1",
     "dayjs": "^1.11.13",
+    "leaflet": "^1.9.4",
     "lodash": "^4.17.21",
     "uuid": "^11.0.5",
     "vue": "^3.3.11"
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.2",
+    "@types/leaflet": "^1.9.16",
     "@types/lodash": "^4.14.202",
     "@types/mockjs": "^1.0.10",
     "@types/node": "^18.19.3",

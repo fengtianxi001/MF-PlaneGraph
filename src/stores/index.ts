@@ -6,3 +6,5 @@ export {
   type DeviceCategoryItemType,
   type DeviceItemType,
 } from './devices'
+
+export { sceneList, sceneCurrent, type SceneItemType } from './scenes'

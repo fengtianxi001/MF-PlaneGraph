@@ -1,5 +1,5 @@
 <template>
-  <div class="base-device-item">
+  <div class="base-device-item" draggable="true">
     <div class="item-left">
       <img :src="data.image" alt="" style="width: 100%; height: 100%" />
     </div>

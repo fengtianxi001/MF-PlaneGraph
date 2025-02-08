@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import 'leaflet/dist/leaflet.css'
 import ArcoVue from '@arco-design/web-vue'
 import '@arco-design/web-vue/dist/arco.less'
 
