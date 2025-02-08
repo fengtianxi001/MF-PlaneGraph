@@ -1,22 +1,30 @@
 <template>
   <div class="base-device-item">
     <div class="item-left">
-      <img :src="data.icon" alt="" style="width: 100%; height: 100%" />
+      <img :src="data.image" alt="" style="width: 100%; height: 100%" />
     </div>
     <div class="item-main">
-      <div class="item-name">{{ data.name }}({{ data.code }})</div>
-      <div class="item-desc">已绑定-客厅</div>
+      <div>
+        <span class="item-name">{{ data.name }}</span>
+      </div>
+      <div style="margin-top: 4px">
+        <span class="item-badge item-badge-code">{{ data.code }}</span>
+        <span class="item-badge item-badge-category">{{ data.category }}</span>
+        <span class="item-badge item-badge-bind">已绑定-客厅</span>
+        <span class="item-badge item-badge-state">在线</span>
+      </div>
     </div>
-    <div class="item-right">
+    <!-- <div class="item-right">
       <Switch />
-    </div>
+    </div> -->
   </div>
 </template>
 <script setup lang="ts">
-import { Switch } from '@arco-design/web-vue'
+// import { Switch } from '@arco-design/web-vue'
+import { type DeviceItemType } from '@/stores'
 
 interface PropsType {
-  data: Record<string, any>
+  data: DeviceItemType
 }
 const props = defineProps<PropsType>()
 </script>
@@ -25,10 +33,10 @@ const props = defineProps<PropsType>()
   display: flex;
   align-items: center;
   padding: 8px;
+  cursor: move;
+  user-select: none;
   background-color: var(--color-fill-1);
   border: 1px solid var(--color-border);
-
-  //   background-color: blue;
   &:not(:last-child) {
     margin-bottom: 10px;
   }
@@ -40,19 +48,41 @@ const props = defineProps<PropsType>()
     height: 40px;
     margin-right: 8px;
     font-size: 40px;
-
-    // background-color: red;
   }
   .item-main {
     flex: 1;
     .item-name {
-      font-size: 16px;
+      margin-right: 4px;
+      font-size: 14px;
       font-weight: bold;
     }
-    .item-desc {
-      margin-top: 4px;
-      font-size: 12px;
-      color: rgb(var(--gray-6));
+    .item-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      margin-right: 4px;
+      font-size: 10px;
+      background-color: var(--color-neutral-4);
+      border-radius: 2px;
+      &.item-badge-code {
+        color: #fff;
+
+        // background-color: rgb(var(--warning-6));
+      }
+      &.item-badge-category {
+        color: #fff;
+
+        // background-color: rgb(var(--primary-6));
+      }
+      &.item-badge-bind {
+        color: #fff;
+
+        // background-color: rgb(var(--success-6));
+      }
+      &.item-badge-state {
+        color: #fff;
+
+        // background-color: rgb(var(--success-3));
+      }
     }
   }
   .item-right {

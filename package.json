@@ -19,6 +19,7 @@
     "animate.css": "^4.1.1",
     "dayjs": "^1.11.13",
     "lodash": "^4.17.21",
+    "uuid": "^11.0.5",
     "vue": "^3.3.11"
   },
   "devDependencies": {
