@@ -21,7 +21,7 @@
 </template>
 <script setup lang="ts">
 // import { Switch } from '@arco-design/web-vue'
-import { type DeviceItemType } from '@/stores'
+import { type DeviceItemType } from '@/hooks'
 
 interface PropsType {
   data: DeviceItemType
@@ -36,7 +36,7 @@ const props = defineProps<PropsType>()
   cursor: move;
   user-select: none;
   background-color: var(--color-fill-1);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-neutral-3);
   &:not(:last-child) {
     margin-bottom: 10px;
   }

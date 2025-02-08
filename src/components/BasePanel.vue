@@ -27,7 +27,7 @@ const props = defineProps<PropsType>()
   height: 100%;
   overflow: hidden;
   background-color: var(--color-bg-2);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-neutral-3);
   .panel-header {
     flex-shrink: 0;
     padding: 20px 20px 0;

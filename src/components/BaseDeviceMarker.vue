@@ -1,37 +1,14 @@
 <template>
   <div class="base-device-marker">
-    <a-popover position="rt">
+    <Popover position="rt">
       <div class="marker-main">
         <img src="/public/images/devices/10.png" alt="icon" />
       </div>
       <template #content>
-        <div class="descriptions">
-          <div class="description-item">
-            <span class="description-item-label">产品名称：</span>
-            <span class="description-item-value">空气加湿器</span>
-          </div>
-          <div class="description-item">
-            <span class="description-item-label">产品序号：</span>
-            <span class="description-item-value">b64d86a19dc7</span>
-          </div>
-          <div class="description-item">
-            <span class="description-item-label">产品品类：</span>
-            <span class="description-item-value">温控</span>
-          </div>
-          <div class="description-item">
-            <span class="description-item-label">产品厂商：</span>
-            <span class="description-item-value">小米</span>
-          </div>
-          <div class="description-item">
-            <span class="description-item-label">维保时间：</span>
-            <span class="description-item-value">2025-09-10</span>
-          </div>
-        </div>
-        <a-button size="mini" long type="primary" status="danger"
-          >移除</a-button
-        >
+        <BaseDeviceDetail />
+        <Button size="mini" long type="primary" status="danger">移除</Button>
       </template>
-    </a-popover>
+    </Popover>
 
     <div class="marker-tip">
       <div class="maerker-tip-icon"></div>
@@ -39,6 +16,8 @@
   </div>
 </template>
 <script setup lang="ts">
+import BaseDeviceDetail from './BaseDeviceDetail.vue'
+import { Button, Popover } from '@arco-design/web-vue'
 // interface PropsType {}
 // const props = defineProps<PropsType>()
 </script>
@@ -74,7 +53,7 @@
     width: 35px;
     height: 35px;
     background-color: var(--color-bg-2);
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--color-neutral-3);
     border-radius: 50%;
     img {
       width: 30px;

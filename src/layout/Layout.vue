@@ -27,7 +27,7 @@ import LayoutActions from './LayoutActions.vue'
     height: 50px;
     padding: 0 20px;
     background-color: var(--color-menu-light-bg);
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-neutral-3);
   }
   .layout-body {
     box-sizing: border-box;
