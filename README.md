@@ -1,6 +1,6 @@
-# 🍪 MF-StationMonitor
+# 🍪 MF-PlaneGraph
 
-> 一个变电站数字孪生大屏案例
+> 一个设备布置平面图编辑器
 
 > 服务地址 :https://fengtianxi001.github.io/MF-PlaneGraph
 
