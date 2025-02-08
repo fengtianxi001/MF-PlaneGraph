@@ -7,7 +7,15 @@
       />
       <template #content>
         <BaseDeviceDetail :data="data" />
-        <Button size="mini" long type="primary" status="danger">移除</Button>
+        <Button
+          size="mini"
+          long
+          type="primary"
+          status="danger"
+          @click="() => onRemove(data.code)"
+        >
+          移除
+        </Button>
       </template>
     </Popover>
     <div class="base-device-marker-dot"></div>
@@ -20,6 +28,7 @@ import { type DeviceItemType } from '@/hooks'
 
 interface PropsType {
   data: DeviceItemType
+  onRemove: (code: string) => void
 }
 const props = defineProps<PropsType>()
 </script>

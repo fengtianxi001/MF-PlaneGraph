@@ -129,18 +129,33 @@ export function usePlaneGraph(config: {
   //从当前场景中删除设备
   const onRemoveDevice = (code: string) => {
     const scene = scenes.find((item) => item.value === currentScene.value)!
-    // scene.devices =
+    scene.devices = scene.devices.filter((item) => item.code !== code)
+
+    // 从地图上移除对应的 marker
+    map.value!.eachLayer((layer: L.Layer) => {
+      if (layer instanceof L.Marker && layer.options.title === code) {
+        map.value!.removeLayer(layer)
+      }
+    })
+    Array.from(document.querySelectorAll('.arco-trigger-popup')).map((item) => {
+      document.body.removeChild(item)
+    })
   }
   //生成marker
   const generateMarker = (device: DeviceType, latlng: any) => {
     // console.log('latlng', latlng)
-    const html = instantiatedComponent(BaseDeviceMarker, { data: device })
+    const html = instantiatedComponent(BaseDeviceMarker, {
+      data: device,
+      onRemove: onRemoveDevice,
+    })
     const icon = L.divIcon({
       html,
       iconSize: [2, 2],
       iconAnchor: [1, 1],
     })
     const marker = L.marker(latlng, { icon, draggable: true })
+    marker.options.title = device.code
+
     marker.on('mouseover', () => {
       marker.getElement()!.style.zIndex = '1000'
     })
@@ -163,6 +178,7 @@ export function usePlaneGraph(config: {
     a.download = 'scenes.json'
     a.click()
   }
+  // 导入场景数据
   const onImportScenes = () => {
     const input = document.createElement('input')
     input.type = 'file'
@@ -199,6 +215,7 @@ export function usePlaneGraph(config: {
     currentDeviceSort,
     currentScene,
     onSceneChange,
+    onRemoveDevice,
     onExportScenes,
     onImportScenes,
   }

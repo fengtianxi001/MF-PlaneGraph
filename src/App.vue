@@ -52,7 +52,6 @@ const planeContainer = ref<HTMLElement | null>(null)
 const deviceContainer = ref<HTMLElement | null>(null)
 
 const {
-  devices,
   deviceSorts,
   scenes,
   currentDevices,
