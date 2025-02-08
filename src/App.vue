@@ -1,12 +1,20 @@
 <template>
   <Layout>
-    <BasePanel title="房间平面图">
+    <BasePanel title="房间平面图" tip="右击图标查看设备详情">
+      <template #extra>
+        <Button type="primary" size="small" @click="onExportScenes">
+          导出场景
+        </Button>
+        <Button type="primary" size="small" @click="onImportScenes">
+          导入场景
+        </Button>
+      </template>
       <template #filter>
         <RadioGroup
-          v-model="sceneCurrent"
-          :options="sceneList"
+          v-model="currentScene"
+          :options="scenes"
           type="button"
-          @change="generateScene"
+          @change="onSceneChange"
         />
       </template>
       <template #body>
@@ -16,15 +24,15 @@
     <BasePanel title="智能设备" tip="拖拽设备至左侧进行放置">
       <template #filter>
         <RadioGroup
-          v-model="deviceCategoryCurrent"
-          :options="deviceCategoryList"
+          v-model="currentDeviceSort"
+          :options="deviceSorts"
           type="button"
         />
       </template>
       <template #body>
         <div class="device-container" ref="deviceContainer">
           <BaseDeviceItem
-            v-for="item in deviceListByCategory"
+            v-for="item in currentDevices"
             :data-code="item.code"
             :data="item"
           />
@@ -35,7 +43,7 @@
 </template>
 <script setup lang="ts">
 import { BasePanel, BaseDeviceItem } from '@/components'
-import { RadioGroup } from '@arco-design/web-vue'
+import { RadioGroup, Button } from '@arco-design/web-vue'
 import { Layout } from '@/layout'
 import { ref } from 'vue'
 import { usePlaneGraph } from '@/hooks'
@@ -44,12 +52,15 @@ const planeContainer = ref<HTMLElement | null>(null)
 const deviceContainer = ref<HTMLElement | null>(null)
 
 const {
-  deviceListByCategory,
-  deviceCategoryList,
-  deviceCategoryCurrent,
-  sceneList,
-  sceneCurrent,
-  generateScene,
+  devices,
+  deviceSorts,
+  scenes,
+  currentDevices,
+  currentDeviceSort,
+  currentScene,
+  onSceneChange,
+  onExportScenes,
+  onImportScenes,
 } = usePlaneGraph({ planeContainer, deviceContainer })
 </script>
 

@@ -1,6 +1,1 @@
-export {
-  usePlaneGraph,
-  type DeviceCategoryItemType,
-  type DeviceItemType,
-  type SceneItemType,
-} from './usePlaneGraph'
+export { usePlaneGraph, type DeviceType, type SceneType } from './usePlaneGraph'

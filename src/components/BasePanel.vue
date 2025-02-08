@@ -1,14 +1,19 @@
 <template>
   <div class="base-panel">
     <div class="base-panel-header">
-      <span class="base-panel-header-title">{{ title }}</span>
-      <span class="base-panel-header-tip" v-if="tip">
-        <icon-question-circle />
-        <span style="margin-left: 2px">{{ tip }}</span>
-      </span>
+      <div>
+        <span class="base-panel-header-title">{{ title }}</span>
+        <span class="base-panel-header-tip" v-if="tip">
+          <icon-question-circle />
+          <span style="margin-left: 2px">{{ tip }}</span>
+        </span>
+      </div>
     </div>
     <div class="base-panel-filter" v-if="$slots.filter">
       <slot name="filter"></slot>
+      <div style="display: flex; grid-gap: 10px">
+        <slot name="extra"></slot>
+      </div>
     </div>
     <div class="base-panel-body">
       <!-- 让滚动条贴着容器边缘   -->
@@ -50,7 +55,9 @@ const props = defineProps<PropsType>()
     }
   }
   &-filter {
+    display: flex;
     flex-shrink: 0;
+    justify-content: space-between;
     padding: 20px 20px 0;
   }
   &-body {
