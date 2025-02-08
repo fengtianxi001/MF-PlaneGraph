@@ -1,0 +1,23 @@
+.leaflet-bar {
+  border: 1px solid var(--color-neutral-3) !important;
+  border-width: 1px !important;
+  border-radius: 0 !important;
+  a {
+    line-height: 26px !important;
+    color: var(--color-text-1) !important;
+    background-color: var(--color-bg-2) !important;
+    border-bottom: 1px solid var(--color-neutral-3) !important;
+    border-radius: 0 !important;
+    &.leaflet-disabled {
+      color: var(--color-text-3) !important;
+      cursor: not-allowed !important;
+      background-color: var(--color-neutral-2) !important;
+    }
+    &:last-child {
+      border-bottom: unset !important;
+    }
+  }
+}
+.leaflet-div-icon {
+  border: unset !important;
+}
