@@ -19,9 +19,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import { type DeviceItemType } from '@/hooks'
+import { type DeviceType } from '@/hooks'
 interface PropsType {
-  data: DeviceItemType
+  data: DeviceType
 }
 const props = defineProps<PropsType>()
 </script>

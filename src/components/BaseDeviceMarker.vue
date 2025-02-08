@@ -24,10 +24,10 @@
 <script setup lang="ts">
 import BaseDeviceDetail from './BaseDeviceDetail.vue'
 import { Button, Popover } from '@arco-design/web-vue'
-import { type DeviceItemType } from '@/hooks'
+import { type DeviceType } from '@/hooks'
 
 interface PropsType {
-  data: DeviceItemType
+  data: DeviceType
   onRemove: (code: string) => void
 }
 const props = defineProps<PropsType>()
