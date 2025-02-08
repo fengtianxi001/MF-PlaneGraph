@@ -15,7 +15,7 @@ export function getImageInfo(url: string) {
   })
 }
 
-export const instantiatedComponent = (component: any, props: any) => {
+export function instantiatedComponent(component: any, props: any) {
   const newComponent = defineComponent({
     render() {
       return h(component, props)
@@ -24,4 +24,8 @@ export const instantiatedComponent = (component: any, props: any) => {
   const instance = createVNode(newComponent)
   render(instance, document.createElement('div'))
   return instance.el as HTMLElement
+}
+
+export function getAssetUrl(url: string) {
+  return `${import.meta.env.VITE_API_DOMAIN}/${url}`
 }
