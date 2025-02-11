@@ -1,11 +1,11 @@
 <template>
   <div class="layout-actions">
     <div class="action-item" @click="methods.onTheme">
-      <i v-show="!isDark" class="fa-solid fa-moon"></i>
-      <i v-show="isDark" class="fa-solid fa-sun"></i>
+      <i v-show="!isDark" class="mf-icon mf-icon-moon"></i>
+      <i v-show="isDark" class="mf-icon mf-icon-sun"></i>
     </div>
     <div class="action-item" @click="methods.onGithub">
-      <i class="fa-brands fa-github"></i>
+      <i class="mf-icon mf-icon-github"></i>
     </div>
   </div>
 </template>
