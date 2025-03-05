@@ -2,7 +2,6 @@ import { ref, computed, shallowRef, type Ref, onMounted, reactive } from 'vue'
 import * as L from 'leaflet'
 import { BaseDeviceMarker } from '@/components'
 import { getImageInfo, instantiatedComponent, getAssetUrl } from '@/utils'
-import { filter } from 'lodash'
 
 export type DeviceSortType = '温控' | '安全' | '娱乐' | '其他'
 
@@ -11,7 +10,7 @@ export type DeviceType = {
   code: string
   image: string
   category: DeviceSortType
-  position?: L.LatLng
+  position?: any
 }
 
 export type SceneType = {
@@ -33,13 +32,124 @@ export function usePlaneGraph(config: {
     {
       label: '场景1',
       value: '场景1',
-      image: getAssetUrl('/images/scenes/1.png'),
-      devices: [],
+      image: './/images/scenes/1.png',
+      devices: [
+        {
+          name: '空气加湿器',
+          code: 'b64d86a19dc7',
+          image: './/images/devices/1.png',
+          category: '其他',
+          position: {
+            lat: -63.51433865701932,
+            lng: 231,
+          },
+        },
+        {
+          name: '电吹风',
+          code: 'ad77e73280d3',
+          image: './/images/devices/9.png',
+          category: '其他',
+          position: {
+            lat: -118.01213270978559,
+            lng: 320.5,
+          },
+        },
+        {
+          name: '智能闹钟',
+          code: 'c3e3f3a6213d',
+          image: './/images/devices/13.png',
+          category: '其他',
+          position: {
+            lat: -84.01323568340246,
+            lng: 76,
+          },
+        },
+        {
+          name: '滚筒洗衣机',
+          code: 'f792dd8f989f',
+          image: './/images/devices/6.png',
+          category: '其他',
+          position: {
+            lat: -202.96227830230302,
+            lng: 317,
+          },
+        },
+        {
+          name: '电风扇',
+          code: 'cc805117dc5d',
+          image: './/images/devices/16.png',
+          category: '其他',
+          position: {
+            lat: -163.97551398570548,
+            lng: 149.5,
+          },
+        },
+        {
+          name: '投影仪',
+          code: 'b1c9ff86591a',
+          image: './/images/devices/8.png',
+          category: '娱乐',
+          position: {
+            lat: -81.51257389923234,
+            lng: 155.5,
+          },
+        },
+        {
+          name: '按摩椅',
+          code: '1ccefe2be178',
+          image: './/images/devices/7.png',
+          category: '娱乐',
+          position: {
+            lat: -70.02338304067766,
+            lng: 213,
+          },
+        },
+        {
+          name: '智能音箱',
+          code: 'w5ea0618149d',
+          image: './/images/devices/12.png',
+          category: '娱乐',
+          position: {
+            lat: -103.0112503308921,
+            lng: 220,
+          },
+        },
+        {
+          name: '云台摄像头',
+          code: 'cf3be09a9e47',
+          image: './/images/devices/4.png',
+          category: '安全',
+          position: {
+            lat: -98.01169152033884,
+            lng: 270.5,
+          },
+        },
+        {
+          name: '智能门锁',
+          code: 'ccc5e7d2c7da',
+          image: './/images/devices/14.png',
+          category: '安全',
+          position: {
+            lat: -47.50727962587135,
+            lng: 196.5,
+          },
+        },
+        {
+          name: '冰柜',
+          code: 'e801626f006b',
+          image: './/images/devices/17.png',
+          category: '温控',
+          position: {
+            lat: -129.00022059472337,
+            lng: 92,
+          },
+        },
+      ],
     },
     {
       label: '场景2',
       value: '场景2',
-      image: getAssetUrl('/images/scenes/2.png'),
+      image: './/images/scenes/2.png',
       devices: [],
     },
   ])
@@ -339,7 +449,7 @@ function useDevices() {
   const currentDeviceSort = ref<DeviceSortType>(deviceSorts[0])
   //当前分类下的设备
   const currentDevices = computed(() =>
-    filter(devices, { category: currentDeviceSort.value })
+    devices.filter((item) => item.category === currentDeviceSort.value)
   )
 
   return {
